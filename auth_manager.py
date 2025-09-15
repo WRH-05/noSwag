@@ -24,7 +24,7 @@ class AuthManager:
         if not self.username or not self.password:
             print("Warning: Email credentials not configured.")
             print("Please create a .env file with EMAIL_ADDRESS and EMAIL_PASSWORD.")
-            print("See .env.example for setup instructions.")
+            print("See README.md for detailed setup instructions.")
 
     def send_email(self, to_email, subject, body):
         """Send email with verification code"""
