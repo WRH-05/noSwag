@@ -2,16 +2,51 @@
 
 A secure, CLI-based password manager with email verification and strong encryption.
 
-## Quick Start
+## Installation Options
 
-### Prerequisites
+### Option 1: Standalone Executable (Recommended for End Users)
+
+Download the pre-built `noswag.exe` executable - no Python installation required!
+
+1. **Download** `noswag.exe` from the releases
+2. **Create a folder** for noSwag (e.g., `C:\noSwag\`)
+3. **Place the executable** in the folder
+4. **Add to PATH** for global access (optional)
+
+**Requirements:**
+- Windows 10/11 (64-bit)
+- No Python installation needed
+- No additional dependencies required
+
+**Setup:**
+```bash
+# Create folder
+mkdir C:\noSwag
+cd C:\noSwag
+
+# Place noswag.exe in this folder
+# Create .env file with your email settings (see Email Configuration below)
+
+# Test it works
+noswag.exe
+```
+
+**Add to PATH (optional):**
+1. Add `C:\noSwag` to your system PATH
+2. Open new terminal and type: `noswag`
+
+### Option 2: Run from Source (For Developers)
+
+If you want to run from Python source code:
+
+#### Prerequisites
 
 1. **Install required Python packages:**
 ```bash
 pip install cryptography python-dotenv
 ```
 
-2. **Set up email credentials** (optional but recommended for account verification):
+2. **Set up email credentials** (optional but recommended for account verification)
 
 ## Email Configuration Setup
 
@@ -56,7 +91,29 @@ python -c "from auth_manager import AuthManager; auth = AuthManager(); print('�
 
 ## Getting Started
 
-### First Time Setup
+### Using the Executable (noswag.exe)
+
+1. **Create your configuration:**
+   - Copy `.env.example` to `.env`
+   - Edit `.env` with your Gmail credentials (see Email Configuration above)
+
+2. **Run noSwag:**
+   ```bash
+   noswag.exe    # or just "noswag" if added to PATH
+   ```
+
+3. **Register a new account:**
+   - Type `register`
+   - Enter your email address
+   - Check your email for verification code
+   - Enter the 6-digit code
+   - Create a secure master password
+
+4. **Start using:**
+   - Type `login` to access your vault
+   - Use `help` to see all available commands
+
+### Using Python Source Code
 
 1. Run the password manager:
 ```bash
@@ -74,6 +131,72 @@ python noSwag.py
    - Type `login` or `l`
    - Enter your master password
    - Use `help` to see all available commands
+
+## Building Your Own Executable
+
+Want to build the executable yourself? We've included `build_executable.py` for this purpose.
+
+### Prerequisites for Building
+
+1. **Install build dependencies:**
+```bash
+pip install pyinstaller cryptography python-dotenv
+```
+
+2. **Fix potential conflicts (Anaconda users):**
+```bash
+conda remove pathlib    # Remove obsolete pathlib package that conflicts with PyInstaller
+```
+
+### Build Process
+
+1. **Run the build script:**
+```bash
+python build_executable.py
+```
+
+2. **Wait for completion** (2-5 minutes)
+
+3. **Find your executable:**
+   - Location: `dist/noswag.exe`
+   - Size: ~20-30 MB (includes Python runtime and all dependencies)
+
+### Build Script Features
+
+The `build_executable.py` script includes:
+- ✅ **Dependency checking** - Verifies all required files and packages
+- ✅ **Conflict detection** - Checks for pathlib conflicts (common with Anaconda)
+- ✅ **Auto-bundling** - Includes all Python modules and dependencies
+- ✅ **Testing** - Validates the built executable works correctly
+- ✅ **Size reporting** - Shows final executable size
+
+### Troubleshooting Build Issues
+
+**"pathlib package is obsolete" error:**
+```bash
+conda remove pathlib
+# or
+pip uninstall pathlib
+```
+
+**Missing dependencies:**
+```bash
+pip install --upgrade pyinstaller cryptography python-dotenv
+```
+
+**Build fails:**
+1. Ensure all `.py` files are in the same directory
+2. Check that Python 3.7+ is installed
+3. Try building in a clean virtual environment
+
+### Distribution
+
+After building, you can distribute just the executable:
+- ✅ **Share `noswag.exe`** - Others can use without Python
+- ✅ **Include `.env.example`** - For email setup guidance  
+- ✅ **Include `README.md`** - For instructions
+- ❌ **Don't include your `.env`** - Contains your credentials!
+- ❌ **Don't include your `data.json`** - Contains your encrypted passwords!
 
 ## Available Commands
 
@@ -99,22 +222,49 @@ python noSwag.py
 
 ## File Structure
 
-- `data.json` - Your encrypted password vault (created automatically after registration)
-- `noSwag.py` - Main CLI application
+### For Executable Users:
+- `noswag.exe` - The standalone executable (includes all Python code)
 - `.env` - Your email configuration (create from `.env.example`)
-- `.env.example` - Template for email setup
+- `data.json` - Your encrypted password vault (created automatically after registration)
+
+### For Developers (Source Code):
+- `noSwag.py` - Main CLI application
 - `storage_manager.py` - Handles encrypted file operations
 - `crypto_manager.py` - Encryption/decryption logic
 - `auth_manager.py` - Email verification system
 - `password_generator.py` - Secure password generation
+- `build_executable.py` - Script to build standalone executable
+- `.env.example` - Template for email setup
+- `.gitignore` - Protects sensitive files from version control
+
+### Important Files:
+- **`.env`** - Keep this secure! Contains your email credentials
+- **`data.json`** - Keep this safe! Contains your encrypted passwords  
+- Both files are automatically excluded from Git for security
 
 ## Important Notes
 
-- **Backup your data.json file** - It contains all your passwords
+- **Backup your data.json file** - It contains all your encrypted passwords
 - **Remember your master password** - It cannot be recovered if lost
+- **Keep your .env file secure** - It contains your email credentials
 - Your master password never leaves your computer
 - All passwords are encrypted before being stored
 - Email verification is optional but recommended for account recovery
+- The executable is portable and works on any Windows system without Python
+- Your credentials are NOT hardcoded into the executable - they remain in your `.env` file
+
+## Portable Setup
+
+Create a portable noSwag installation:
+
+```
+📁 MyPortableNoSwag/
+├── noswag.exe          # The executable (no secrets inside)
+├── .env                # Your email configuration  
+└── data.json           # Your encrypted passwords (created when you register)
+```
+
+You can move this folder anywhere and noSwag will work perfectly!
 
 ## Troubleshooting
 
