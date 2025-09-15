@@ -5,17 +5,26 @@ import secrets
 import os
 import time
 
+# Try to load .env file if python-dotenv is available
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # dotenv not installed, will use system environment variables
+
 class AuthManager:
     def __init__(self):
         # Load email config from environment variables
-        self.smtp_server = "smtp.gmail.com"
-        self.port = 587
+        self.smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        self.port = int(os.getenv("SMTP_PORT", "587"))
         self.username = os.getenv("EMAIL_ADDRESS")
         self.password = os.getenv("EMAIL_PASSWORD")
         self.pending_codes = {}  # Store verification codes temporarily
         
         if not self.username or not self.password:
-            print("Warning: Email credentials not configured. Set EMAIL_ADDRESS and EMAIL_PASSWORD environment variables.")
+            print("Warning: Email credentials not configured.")
+            print("Please create a .env file with EMAIL_ADDRESS and EMAIL_PASSWORD.")
+            print("See .env.example for setup instructions.")
 
     def send_email(self, to_email, subject, body):
         """Send email with verification code"""
