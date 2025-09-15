@@ -6,7 +6,7 @@ from datetime import datetime
 from crypto_manager import CryptoManager
 
 class StorageManager:
-    def __init__(self, file_path="CLIPW/data.json"):
+    def __init__(self, file_path="data.json"):
         self.file_path = file_path
         self.crypto = None
 
